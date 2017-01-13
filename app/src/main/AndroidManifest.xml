@@ -22,6 +22,7 @@
         <meta-data android:name="apkplug_appid" android:value="app_289v2AvgcZa"/>
         <meta-data android:name="apkplug_channel" android:value="fangxin"/>
         <meta-data android:name="apkplug_version" android:value="v109"/>
+        <meta-data android:name="apkplug_containerid" android:value="hospitalPlug"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -31,8 +32,17 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="org.apkplug.app.apkplugActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"></action>
+            </intent-filter>
+        </activity>
+
         <service android:name="com.apkplug.libmerge.common.MergeServeice"
                  android:process=":merge" />
+        <service android:name="org.apkplug.app.apkplugService"/>
         <activity
             android:name="com.apkplug.packer.app.PProxyActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -42,5 +52,6 @@
             android:name="com.apkplug.packer.app.PProxyService"
             />
         <provider android:name="com.apkplug.packer.app.PProxyProvider" android:authorities="com.lenovohit.hotpatch_apkplug.packer.provider.proxy"/>
+        <provider android:name="org.apkplug.app.apkplugProvider" android:authorities="com.lenovohit.hotpatch_apkplug.apkplugprovider"/>
     </application>
 </manifest>

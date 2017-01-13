@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.apkplug.packersdk.PackerManager;
+import com.lenovohit.hotpatch_apkplug.utils.Constant;
+
+import org.apkplug.app.FrameworkFactory;
+import org.osgi.framework.BundleContext;
 
 /**
  * 自定义application
@@ -11,6 +15,9 @@ import com.apkplug.packersdk.PackerManager;
  */
 
 public class HotPatchApplication extends Application {
+    //保存bundleContext给其他地方调用
+    private  BundleContext bundleContext;
+    private static HotPatchApplication hotPatchApplication;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -22,9 +29,23 @@ public class HotPatchApplication extends Application {
 
     @Override
     public void onCreate() {
-        if(PackerManager.getInstance().applicationOnCreate(this,"MIGdMA0GCSqGSIb3DQEBAQUAA4GLADCBhwKBgQDJAlbro3lIHxkUMpWrQUjveQYoUdSdT1KdpQl4qjqgf3U2tSHZY6SjXSHF/30N/h4LRBqKYff86AYFnCh2oYTUAZmXURw9K7KhqW5EzoSZa4nEkBB9wKjezBeY1I7FSGeynWxxKFoXoprjDDeXM/6pBpccE8kgFqfI5T9HFqKXYwIBAw==")){
+        if(PackerManager.getInstance().applicationOnCreate(this, Constant.APKPLUG_PUBLICKEY)){
             return;
         }
         super.onCreate();
+        hotPatchApplication = this;
+        try {
+            bundleContext = FrameworkFactory.getInstance().start(null, this).getSystemBundleContext();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static HotPatchApplication getHotPatchApplication(){
+        return hotPatchApplication;
+    }
+
+    public BundleContext getBundleContext(){
+        return bundleContext;
     }
 }

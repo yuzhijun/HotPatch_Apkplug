@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin-features
+    Bundle-Name="plugproject"
+    Bundle-SymbolicName="com.lenovohit.pluginproject"
+    Bundle-Version="100"
+    Bundle-Activator="com.lenovohit.pluginproject.activator.MainActivator"
+    date="2017.01.13"
+    provider-name="yuzhijun"
+    start-level ="1"
+    start-up="true"
+    Use-Host-MetaData="true"
+    Short-Links="http://yyfr.net/q2z"
+    plug_id="plug_user_28e94IAnV7y"
+    Bundle-Activity="com.lenovohit.pluginproject.MainActivity"
+>
+</plugin-features>
