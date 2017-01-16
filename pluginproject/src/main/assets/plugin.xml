@@ -2,7 +2,7 @@
 <plugin-features
     Bundle-Name="plugproject"
     Bundle-SymbolicName="com.lenovohit.pluginproject"
-    Bundle-Version="100"
+    Bundle-Version="101"
     Bundle-Activator="com.lenovohit.pluginproject.activator.MainActivator"
     date="2017.01.13"
     provider-name="yuzhijun"

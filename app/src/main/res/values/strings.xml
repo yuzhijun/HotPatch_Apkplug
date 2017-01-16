@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">HotPatch_Apkplug</string>
+    <string name="update">更新插件</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_show_download">下载状态</string>
+    <string name="title_activity_download_panel">DownloadPanel</string>
 </resources>
