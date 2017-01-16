@@ -26,14 +26,20 @@ import com.apkplug.trust.net.listeners.OnGetPlugInfoListener;
 import com.apkplug.trust.net.requests.GetPlugInfoRequest;
 import com.lenovohit.hotpatch_apkplug.base.HotPatchApplication;
 import com.lenovohit.hotpatch_apkplug.hotpatch.HotpatchManage;
+import com.lenovohit.hotpatch_apkplug.rpcinterface.IShareBean;
+import com.lenovohit.hotpatch_apkplug.rpcinterface.ShareHandler;
 import com.lenovohit.hotpatch_apkplug.ui.adapter.MyRecyclerAdapter;
 import com.lenovohit.hotpatch_apkplug.utils.Constant;
+
+import org.apkplug.Bundle.bundlerpc.BundleRPCAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mTextView;
+    private Button btnComponent;
+    private Button btnRPC;
     private FloatingActionButton fab;
     private Toolbar mToolbar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTextView = (TextView) findViewById(R.id.content);
+        btnComponent = (Button) findViewById(R.id.btnComponent);
+        btnRPC = (Button) findViewById(R.id.btnRPC);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mMyRecyclerAdapter);
 
+        //检测有没有新的热更新包
+        HotpatchManage.hotpatchUpadate();
+        //插件托管前需要初始化
+        PlugManager.getInstance().init(this, HotPatchApplication.getHotPatchApplication().getBundleContext(), Constant.APKPLUG_PUBLICKEY,true);
+        //6.0申请权限
+        PlugManager.getInstance().requestPermission(this);
+        //获取后台的插件
+        getPlugInfo();
+
+        initEvent();
+    }
+
+    private void initEvent(){
         mMyRecyclerAdapter.setRecyclerItemClickListener(new MyRecyclerAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onClick(View view, int person) {
@@ -83,14 +104,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //检测有没有新的热更新包
-        HotpatchManage.hotpatchUpadate();
-        //插件托管前需要初始化
-        PlugManager.getInstance().init(this, HotPatchApplication.getHotPatchApplication().getBundleContext(), Constant.APKPLUG_PUBLICKEY,true);
-        //6.0申请权限
-        PlugManager.getInstance().requestPermission(this);
-        //获取后台的插件
-        getPlugInfo();
+        btnComponent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO 这里暂时只测试activity的调用
+                Intent intent = new Intent();
+                intent.setClassName(MainActivity.this,"com.lenovohit.pluginproject.SecondActivity");
+                startActivity(intent);
+            }
+        });
+
+        btnRPC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BundleRPCAgent rpcAgent=new BundleRPCAgent(HotPatchApplication.getHotPatchApplication().getBundleContext());
+                try {
+                    ShareHandler shareHandler = rpcAgent.syncCall("apkplug://plug/share",ShareHandler.class);
+                    IShareBean shareBean = new IShareBean() {
+                        @Override
+                        public String getName() {
+                            return "宿主调用插件的服务";
+                        }
+                    };
+
+                    btnRPC.setText(shareHandler.shareBean(shareBean));
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

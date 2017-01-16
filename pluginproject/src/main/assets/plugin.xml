@@ -2,7 +2,7 @@
 <plugin-features
     Bundle-Name="plugproject"
     Bundle-SymbolicName="com.lenovohit.pluginproject"
-    Bundle-Version="101"
+    Bundle-Version="103"
     Bundle-Activator="com.lenovohit.pluginproject.activator.MainActivator"
     date="2017.01.13"
     provider-name="yuzhijun"
@@ -13,4 +13,5 @@
     plug_id="plug_user_28e94IAnV7y"
     Bundle-Activity="com.lenovohit.pluginproject.MainActivity"
 >
+    <rpc-processor uri="apkplug://plug/share" className="com.lenovohit.pluginproject.rpcimpl.ShareProcessor"/>
 </plugin-features>
